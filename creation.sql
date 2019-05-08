@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS Alternative (
 
 CREATE TABLE IF NOT EXISTS Quiz (
   id    INTEGER PRIMARY KEY AUTOINCREMENT,
-  label TEXT UNIQUE NOT NULL,
+  label TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS QuestionQuizComposition (
@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS QuestionAlternativeComposition (
 
 CREATE TABLE IF NOT EXISTS AnswersHistory (
   person INTEGER NOT NULL,
-  alternative INTEGER NOT NULL,
-  question INTEGER NOT NULL,
   quiz INTEGER NOT NULL,
+  question INTEGER NOT NULL,
+  alternative INTEGER NOT NULL,
   date INTEGER NOT NULL,
 
   PRIMARY KEY (person, alternative, question, quiz, date),
