@@ -1,11 +1,60 @@
-CREATE TABLE IF NOT EXISTS Subject (
+CREATE TABLE IF NOT EXISTS People (
   id    INTEGER PRIMARY KEY AUTOINCREMENT,
-  name  TEXT UNIQUE
+  cpf   INTEGER UNIQUE,
+  name  TEXT NOT NULL,
+  birthday INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Question (
   id        INTEGER PRIMARY KEY AUTOINCREMENT,
   statement TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Alternative (
+  id   INTEGER PRIMARY KEY AUTOINCREMENT,
+  text TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Quiz (
+  id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  label TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS QuestionQuizComposition (
+  question INTEGER NOT NULL,
+  quiz INTEGER NOT NULL,
+
+  PRIMARY KEY (question, quiz),
+  FOREIGN KEY (question) REFERENCES Question(id) ON DELETE CASCADE,
+  FOREIGN KEY (quiz) REFERENCES Quiz(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS QuestionAlternativeComposition (
+  question INTEGER NOT NULL,
+  alternative INTEGER NOT NULL,
+
+  PRIMARY KEY (question, alternative),
+  FOREIGN KEY (question) REFERENCES Question(id) ON DELETE CASCADE,
+  FOREIGN KEY (alternative) REFERENCES Alternative (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS AnswersHistory (
+  person INTEGER NOT NULL,
+  quiz INTEGER NOT NULL,
+  question INTEGER NOT NULL,
+  alternative INTEGER NOT NULL,
+  date INTEGER NOT NULL,
+
+  PRIMARY KEY (person, alternative, question, quiz, date),
+  FOREIGN KEY (person) REFERENCES People(id) ON DELETE CASCADE,
+  FOREIGN KEY (alternative) REFERENCES Alternative(id) ON DELETE CASCADE,
+  FOREIGN KEY (question) REFERENCES Question(id) ON DELETE CASCADE,
+  FOREIGN KEY (quiz) REFERENCES Quiz(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Subject (
+  id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  name  TEXT UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS SubjectQuestionComposition (
@@ -16,6 +65,5 @@ CREATE TABLE IF NOT EXISTS SubjectQuestionComposition (
   FOREIGN KEY (subject) REFERENCES Subject(id) ON DELETE CASCADE,
   FOREIGN KEY (question) REFERENCES Question(id) ON DELETE CASCADE
 );
-
 
 PRAGMA foreign_keys = ON;
